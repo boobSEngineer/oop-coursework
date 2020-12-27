@@ -1,5 +1,6 @@
 package com.eltech.coursework.ui;
 
+import com.eltech.coursework.controller.ControllableView;
 import com.eltech.coursework.controller.ObjectController;
 
 import javax.swing.*;
@@ -7,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameFieldView extends JPanel {
+public class GameFieldView extends JPanel implements ControllableView {
     private final int width;
     private final int height;
     private final int padding;
@@ -22,8 +23,18 @@ public class GameFieldView extends JPanel {
         this.setSize(width, height);
     }
 
-    public void addObject(ObjectController controller) {
-        objectControllers.add(controller);
+    @Override
+    public void addController(ObjectController controller) {
+        if (!objectControllers.contains(controller)) {
+            objectControllers.add(controller);
+        }
+        controller.assignToView(this);
+    }
+
+    @Override
+    public void removeController(ObjectController controller) {
+        objectControllers.remove(controller);
+        controller.assignToView(null);
     }
 
     @Override

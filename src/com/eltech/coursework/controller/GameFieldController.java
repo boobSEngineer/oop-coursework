@@ -22,6 +22,5 @@ public class GameFieldController extends ObjectController {
 
         graphics.setColor(Color.BLACK);
         graphics.drawRect(area.x, area.y, area.width, area.height);
-
     }
 }

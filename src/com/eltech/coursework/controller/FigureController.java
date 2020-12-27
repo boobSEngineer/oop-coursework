@@ -1,14 +1,21 @@
 package com.eltech.coursework.controller;
 
-import javax.swing.border.StrokeBorder;
+import com.eltech.coursework.model.Figure;
+
 import java.awt.*;
 
-public class PieceController extends ObjectController {
+public class FigureController extends ObjectController {
+    private final Figure figure;
+
+    public FigureController(Figure figure) {
+        this.figure = figure;
+    }
+
     @Override
     public void paint(Graphics2D graphics, Rectangle area) {
-        int x = 2;
-        int y = 3;
-
+        int x = figure.getX();
+        int y = figure.getY();
+        Figure.Team team = figure.getTeam();
 
         int padding = area.width / 8 / 10;
         Rectangle rect = new Rectangle(
@@ -18,9 +25,9 @@ public class PieceController extends ObjectController {
                 area.height / 8 - padding * 2
         );
 
-        graphics.setColor(Color.WHITE);
+        graphics.setColor(team == Figure.Team.WHITE ? Color.WHITE : Color.BLACK);
         graphics.fillOval(rect.x, rect.y, rect.width, rect.height);
-        graphics.setColor(Color.BLACK);
+        graphics.setColor(team == Figure.Team.WHITE ? Color.BLACK : Color.WHITE);
         graphics.setStroke(new BasicStroke(2));
         graphics.drawOval(rect.x, rect.y, rect.width, rect.height);
         graphics.setStroke(new BasicStroke(1));
