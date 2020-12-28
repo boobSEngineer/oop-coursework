@@ -37,10 +37,20 @@ public class Shashki implements GameRules {
     @Override
     public List<Pair<Integer, Integer>> getAvailableMoves(Figure figure) {
         List<Pair<Integer, Integer>> moves = new ArrayList<>();
-        for (int i = -8; i <= 8; i++) {
-            moves.add(new Pair<>(figure.getX() + i, figure.getY() + i));
-            moves.add(new Pair<>(figure.getX() + i, figure.getY() - i));
+
+        GameField field = figure.getField();
+        int x = figure.getX();
+        int y = figure.getY();
+        for (int xi = -1; xi < 2; xi += 2) {
+            for (int yi = -1; yi < 2; yi += 2) {
+                if (field.getFigure(x + xi, y + yi) == null) {
+                    moves.add(new Pair<>(x + xi, y + yi));
+                } else if (field.getFigure(x + xi * 2, y + yi * 2) == null) {
+                    moves.add(new Pair<>(x + xi * 2, y + yi * 2));
+                }
+            }
         }
+
         return moves;
     }
 
