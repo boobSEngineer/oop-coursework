@@ -22,6 +22,12 @@ public abstract class ObjectController {
         return view;
     }
 
+    public void refreshView() {
+        if (view != null) {
+            view.refresh();
+        }
+    }
+
     public abstract void paint(Graphics2D graphics, Rectangle area);
 
     public boolean onClick(double x, double y) {

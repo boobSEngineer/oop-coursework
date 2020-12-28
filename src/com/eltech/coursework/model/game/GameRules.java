@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface GameRules {
     void setupNewGame(GameField field);
-    List<Figure> getAvailableFigures();
+    List<Figure> getAvailableFigures(GameField field);
     List<Pair<Integer, Integer>> getAvailableMoves(Figure figure);
     void doMove(Figure figure, int x, int y);
 }

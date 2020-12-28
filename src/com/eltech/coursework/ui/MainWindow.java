@@ -3,6 +3,7 @@ package com.eltech.coursework.ui;
 import com.eltech.coursework.controller.GameFieldController;
 import com.eltech.coursework.controller.FigureController;
 import com.eltech.coursework.model.GameField;
+import com.eltech.coursework.model.game.Shashki;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +18,7 @@ public class MainWindow extends JFrame {
         setMinimumSize(new Dimension(width, height));
 
         GameField field = new GameField();
+        field.setGameRules(new Shashki());
         gameField = new GameFieldView(width - 100, height - 100, 10);
         gameField.addController(field.getController());
         add(gameField);

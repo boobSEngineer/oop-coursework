@@ -39,8 +39,7 @@ public class FigureController extends ObjectController {
         int fx = figure.getX();
         int fy = figure.getY();
         if (x * 8 > fx && x * 8 < fx + 1 && y * 8 > fy && y * 8 < fy + 1) {
-            figure.processClick();
-            return true;
+            return figure.processClick();
         }
         return false;
     }

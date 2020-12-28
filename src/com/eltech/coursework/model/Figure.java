@@ -50,7 +50,11 @@ public class Figure {
         return controller;
     }
 
-    public void processClick() {
-        System.out.println("i was clicked");
+    public boolean processClick() {
+        if (field.getSelectedFigure() == null && field.getAvailableFigures().contains(this)) {
+            field.processClickOnAvailableFigure(this);
+            return true;
+        }
+        return false;
     }
 }
