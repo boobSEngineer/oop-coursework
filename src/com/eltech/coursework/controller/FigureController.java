@@ -9,6 +9,7 @@ public class FigureController extends ObjectController {
 
     public FigureController(Figure figure) {
         this.figure = figure;
+        setZIndex(1);
     }
 
     @Override
@@ -31,5 +32,15 @@ public class FigureController extends ObjectController {
         graphics.setStroke(new BasicStroke(2));
         graphics.drawOval(rect.x, rect.y, rect.width, rect.height);
         graphics.setStroke(new BasicStroke(1));
+    }
+
+    @Override
+    public boolean onClick(double x, double y) {
+        int fx = figure.getX();
+        int fy = figure.getY();
+        if (x * 8 > fx && x * 8 < fx + 1 && y * 8 > fy && y * 8 < fy + 1) {
+            return true;
+        }
+        return false;
     }
 }
