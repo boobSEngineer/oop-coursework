@@ -95,6 +95,11 @@ public class GameFieldView extends JPanel implements ControllableView {
     }
 
     @Override
+    public void refresh() {
+        queueRepaint();
+    }
+
+    @Override
     public void paint(Graphics graphics) {
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0, 0, width, height);

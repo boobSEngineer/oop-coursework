@@ -4,7 +4,7 @@ import com.eltech.coursework.controller.ControllableView;
 import com.eltech.coursework.controller.GameFieldController;
 
 public class GameField {
-    private final GameFieldController controller = new GameFieldController();
+    private final GameFieldController controller = new GameFieldController(this);
 
     private final Figure[] field = new Figure[64];
 
@@ -55,4 +55,7 @@ public class GameField {
         }
     }
 
+    public void processClickOnEmptyCell(int x, int y) {
+        System.out.println("empty cell click: " + x + " " + y);
+    }
 }

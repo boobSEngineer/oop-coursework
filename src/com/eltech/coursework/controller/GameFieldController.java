@@ -1,8 +1,16 @@
 package com.eltech.coursework.controller;
 
+import com.eltech.coursework.model.GameField;
+
 import java.awt.*;
 
 public class GameFieldController extends ObjectController {
+    private final GameField field;
+
+    public GameFieldController(GameField field) {
+        this.field = field;
+    }
+
     @Override
     public void paint(Graphics2D graphics, Rectangle area) {
         Color black = new Color(0x00, 0x77, 0);
@@ -26,6 +34,9 @@ public class GameFieldController extends ObjectController {
 
     @Override
     public boolean onClick(double x, double y) {
+        int ix = (int) (x * 8);
+        int iy = (int) (y * 8);
+        field.processClickOnEmptyCell(ix, iy);
         return true;
     }
 }

@@ -49,4 +49,8 @@ public class Figure {
     public FigureController getController() {
         return controller;
     }
+
+    public void processClick() {
+        System.out.println("i was clicked");
+    }
 }
