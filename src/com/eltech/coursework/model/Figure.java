@@ -4,16 +4,18 @@ import com.eltech.coursework.controller.FigureController;
 import com.eltech.coursework.model.game.FigureStrategy;
 import com.eltech.coursework.model.game.PawnStrategy;
 
-public class Figure {
+import java.io.Serializable;
+
+public class Figure implements Serializable {
     public enum Team {
         WHITE,
         BLACK
     }
 
-    private final FigureController controller = new FigureController(this);
-    private final GameField field;
+    private transient FigureController controller;
+    private GameField field;
 
-    private final Team team;
+    private Team team;
     private FigureStrategy strategy = new PawnStrategy();
     private int x;
     private int y;
@@ -53,6 +55,9 @@ public class Figure {
     }
 
     public FigureController getController() {
+        if (controller == null) {
+            controller = new FigureController(this);
+        }
         return controller;
     }
 

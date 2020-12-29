@@ -6,18 +6,43 @@ import com.eltech.coursework.controller.VictoryMessageController;
 import com.eltech.coursework.model.game.GameRules;
 import javafx.util.Pair;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameField {
-    private final GameFieldController controller = new GameFieldController(this);
-    private final VictoryMessageController victoryMessageController = new VictoryMessageController(this);
+public class GameField implements Serializable {
+    public interface ChangeListener {
+        void onChanged(GameField field);
+    }
+
+
+    private transient GameFieldController controller;
+    private transient VictoryMessageController victoryMessageController;
+    private transient ChangeListener listener = null;
+
     private GameRules gameRules;
 
     private final Figure[] field = new Figure[64];
 
+    public void setListener(ChangeListener listener) {
+        this.listener = listener;
+    }
+
     public GameFieldController getController() {
+        if (controller == null) {
+            controller = new GameFieldController(this);
+        }
         return controller;
+    }
+
+    public VictoryMessageController getVictoryMessageController() {
+        if (victoryMessageController == null) {
+            victoryMessageController = new VictoryMessageController(this);
+        }
+        return victoryMessageController;
     }
 
     public void setGameRules(GameRules gameRules) {
@@ -45,7 +70,7 @@ public class GameField {
             figure.setPos(x, y);
         }
 
-        ControllableView view = controller.getView();
+        ControllableView view = getController().getView();
         if (view != null) {
             if (last != null) {
                 view.removeController(last.getController());
@@ -64,6 +89,22 @@ public class GameField {
             }
         }
         return list;
+    }
+
+    public void reAddAllControllers(ControllableView view) {
+        view.addController(getController());
+        for (Figure figure : getAllFigures()) {
+            view.addController(figure.getController());
+        }
+        checkForVictory();
+    }
+
+    public void clearAllFigures() {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                setFigure(x, y, null);
+            }
+        }
     }
 
 
@@ -89,40 +130,60 @@ public class GameField {
         selectedFigure = null;
 
         gameRules.setupNewGame(this);
+        onChanged();
         startNewMove();
+    }
+
+    public void checkForVictory() {
+        gameRules.checkForVictory(this);
     }
 
     private void startNewMove() {
         availableFigures = gameRules.getAvailableFigures(this);
-        controller.refreshView();
+        getController().refreshView();
+        onChanged();
     }
 
     public void processClickOnAvailableFigure(Figure figure) {
         availableMoves = gameRules.getAvailableMoves(figure);
         selectedFigure = figure;
-        controller.refreshView();
+        getController().refreshView();
+        onChanged();
     }
 
     public void processClickOnEmptyCell(int x, int y) {
         Pair<Integer, Integer> pos = new Pair<>(x, y);
         if (availableMoves.contains(pos)) {
             gameRules.doMove(selectedFigure, x, y);
+            gameRules.checkForVictory(this);
             startNewMove();
         }
         availableMoves = new ArrayList<>();
         selectedFigure = null;
-        controller.refreshView();
+        getController().refreshView();
+        onChanged();
     }
 
     public void reportVictory(String message) {
-        ControllableView view = controller.getView();
-        victoryMessageController.setMessage(message);
-        view.addController(victoryMessageController);
+        VictoryMessageController victoryMessageController = getVictoryMessageController();
+        ControllableView view = getController().getView();
+        if (view != null) {
+            victoryMessageController.setMessage(message);
+            view.addController(victoryMessageController);
+        }
+        onChanged();
     }
 
     public void restartGame() {
-        ControllableView view = controller.getView();
-        view.removeController(victoryMessageController);
+        ControllableView view = getController().getView();
+        view.removeController(getVictoryMessageController());
         newGame();
     }
+
+    private void onChanged() {
+        if (listener != null) {
+            listener.onChanged(this);
+        }
+    }
+
 }

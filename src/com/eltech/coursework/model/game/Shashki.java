@@ -89,10 +89,10 @@ public class Shashki implements GameRules {
         if (!hasExtraMove) {
             currentTeam = (currentTeam == Figure.Team.WHITE ? Figure.Team.BLACK : Figure.Team.WHITE);
         }
-        checkForVictory(figure.getField());
     }
 
-    private void checkForVictory(GameField field) {
+    @Override
+    public void checkForVictory(GameField field) {
         int whiteCount = 0;
         int blackCount = 0;
         for (Figure figure : field.getAllFigures()) {

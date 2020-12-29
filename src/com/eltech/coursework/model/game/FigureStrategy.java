@@ -4,10 +4,11 @@ import com.eltech.coursework.model.Figure;
 import javafx.util.Pair;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface FigureStrategy {
+public interface FigureStrategy extends Serializable {
     class FigureMoves {
         public final Figure figure;
         public final List<Pair<Integer, Integer>> eatingMoves = new ArrayList<>();
