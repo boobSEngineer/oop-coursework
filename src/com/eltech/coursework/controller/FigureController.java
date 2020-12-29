@@ -26,10 +26,13 @@ public class FigureController extends ObjectController {
                 area.height / 8 - padding * 2
         );
 
+        Figure selectedFigure = figure.getField().getSelectedFigure();
+        boolean isSelected = selectedFigure == figure || (selectedFigure == null && figure.getField().getAvailableFigures().contains(figure));
+
         graphics.setColor(team == Figure.Team.WHITE ? Color.WHITE : Color.BLACK);
         graphics.fillOval(rect.x, rect.y, rect.width, rect.height);
-        graphics.setColor(team == Figure.Team.WHITE ? Color.BLACK : Color.WHITE);
-        graphics.setStroke(new BasicStroke(2));
+        graphics.setColor(isSelected ? Color.RED : (team == Figure.Team.WHITE ? Color.BLACK : Color.WHITE));
+        graphics.setStroke(new BasicStroke(isSelected ? 4 : 2));
         graphics.drawOval(rect.x, rect.y, rect.width, rect.height);
         graphics.setStroke(new BasicStroke(1));
     }
