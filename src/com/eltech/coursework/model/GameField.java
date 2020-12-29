@@ -6,7 +6,6 @@ import com.eltech.coursework.controller.VictoryMessageController;
 import com.eltech.coursework.model.game.GameRules;
 import javafx.util.Pair;
 
-import javax.swing.text.View;
 import java.util.ArrayList;
 import java.util.List;
 

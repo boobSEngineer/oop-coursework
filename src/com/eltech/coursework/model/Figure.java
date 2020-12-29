@@ -3,7 +3,6 @@ package com.eltech.coursework.model;
 import com.eltech.coursework.controller.FigureController;
 import com.eltech.coursework.model.game.FigureStrategy;
 import com.eltech.coursework.model.game.PawnStrategy;
-import com.eltech.coursework.model.game.QueenStrategy;
 
 public class Figure {
     public enum Team {

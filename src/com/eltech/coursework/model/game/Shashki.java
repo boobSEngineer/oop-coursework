@@ -6,7 +6,6 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Shashki implements GameRules {
     private Figure.Team currentTeam = Figure.Team.WHITE;
