@@ -2,6 +2,7 @@ package com.eltech.coursework.ui;
 
 import com.eltech.coursework.controller.GameFieldController;
 import com.eltech.coursework.controller.FigureController;
+import com.eltech.coursework.controller.VictoryMessageController;
 import com.eltech.coursework.model.GameField;
 import com.eltech.coursework.model.game.Shashki;
 

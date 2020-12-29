@@ -2,14 +2,17 @@ package com.eltech.coursework.model;
 
 import com.eltech.coursework.controller.ControllableView;
 import com.eltech.coursework.controller.GameFieldController;
+import com.eltech.coursework.controller.VictoryMessageController;
 import com.eltech.coursework.model.game.GameRules;
 import javafx.util.Pair;
 
+import javax.swing.text.View;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameField {
     private final GameFieldController controller = new GameFieldController(this);
+    private final VictoryMessageController victoryMessageController = new VictoryMessageController(this);
     private GameRules gameRules;
 
     private final Figure[] field = new Figure[64];
@@ -110,5 +113,17 @@ public class GameField {
         availableMoves = new ArrayList<>();
         selectedFigure = null;
         controller.refreshView();
+    }
+
+    public void reportVictory(String message) {
+        ControllableView view = controller.getView();
+        victoryMessageController.setMessage(message);
+        view.addController(victoryMessageController);
+    }
+
+    public void restartGame() {
+        ControllableView view = controller.getView();
+        view.removeController(victoryMessageController);
+        newGame();
     }
 }
