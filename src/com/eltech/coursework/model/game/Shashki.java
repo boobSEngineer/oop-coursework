@@ -28,45 +28,8 @@ public class Shashki implements GameRules {
         }
     }
 
-
-    class FigureMoves {
-        public final Figure figure;
-        public final List<Pair<Integer, Integer>> eatingMoves = new ArrayList<>();
-        public final List<Pair<Integer, Integer>> normalMoves = new ArrayList<>();
-
-        FigureMoves(Figure figure) {
-            this.figure = figure;
-        }
-    }
-
-    private boolean isPositionInsideField(int x, int y) {
-        return x >= 0 && y >= 0 && x < 8 && y < 8;
-    }
-
-    private FigureMoves getAvailableMovesData(Figure figure) {
-        FigureMoves result = new FigureMoves(figure);
-
-        GameField field = figure.getField();
-        int x = figure.getX();
-        int y = figure.getY();
-        for (int xi = -1; xi < 2; xi += 2) {
-            for (int yi = -1; yi < 2; yi += 2) {
-                if (isPositionInsideField(x + xi, y + yi)) {
-                    Figure eatFigure = field.getFigure(x + xi, y + yi);
-                    if (eatFigure == null) {
-                        if (figure.getTeam() == Figure.Team.WHITE && yi < 0 || figure.getTeam() == Figure.Team.BLACK && yi > 0) {
-                            result.normalMoves.add(new Pair<>(x + xi, y + yi));
-                        }
-                    } else if (eatFigure.getTeam() != figure.getTeam() &&
-                            isPositionInsideField(x + xi * 2, y + yi * 2) &&
-                            field.getFigure(x + xi * 2, y + yi * 2) == null) {
-                        result.eatingMoves.add(new Pair<>(x + xi * 2, y + yi * 2));
-                    }
-                }
-            }
-        }
-
-        return result;
+    public FigureStrategy.FigureMoves getAvailableMovesData(Figure figure) {
+        return figure.getStrategy().getAvailableMoves(figure);
     }
 
     @Override
@@ -88,22 +51,38 @@ public class Shashki implements GameRules {
 
     @Override
     public List<Pair<Integer, Integer>> getAvailableMoves(Figure figure) {
-        FigureMoves moves = getAvailableMovesData(figure);
+        FigureStrategy.FigureMoves moves = getAvailableMovesData(figure);
         return moves.eatingMoves.size() > 0 ? moves.eatingMoves : moves.normalMoves;
+    }
+
+    private List<Pair<Integer, Integer>> getEatingPositions(Figure figure, int x2, int y2) {
+        GameField field = figure.getField();
+        List<Pair<Integer, Integer>> eatingPositions = new ArrayList<>();
+        for (int x = figure.getX(), y = figure.getY(); x != x2 && y != y2;) {
+            Figure eatingFigure = field.getFigure(x, y);
+            if (eatingFigure != null && eatingFigure.getTeam() != figure.getTeam()) {
+                eatingPositions.add(new Pair<>(x, y));
+            }
+            if (x < x2) x++;
+            else x--;
+            if (y < y2) y++;
+            else y--;
+        }
+
+        return eatingPositions;
     }
 
     @Override
     public void doMove(Figure figure, int x, int y) {
         boolean hasExtraMove = false;
-        if (Math.abs(x - figure.getX()) > 1 || Math.abs(y - figure.getY()) > 1) {
-            int eatX = (figure.getX() + x) / 2;
-            int eatY = (figure.getY() + y) / 2;
+        List<Pair<Integer, Integer>> eatingPositions = getEatingPositions(figure, x, y);
+        if (eatingPositions.size() > 0) {
+            for (Pair<Integer, Integer> eatPos : eatingPositions) {
+                figure.getField().setFigure(eatPos.getKey(), eatPos.getValue(), null);
+            }
             figure.move(x, y);
-            if (figure.getField().getFigure(eatX, eatY) != null) {
-                figure.getField().setFigure(eatX, eatY, null);
-                if (getAvailableMovesData(figure).eatingMoves.size() > 0) {
-                    hasExtraMove = true;
-                }
+            if (getAvailableMovesData(figure).eatingMoves.size() > 0) {
+                hasExtraMove = true;
             }
         } else {
             figure.move(x, y);

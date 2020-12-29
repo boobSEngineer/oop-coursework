@@ -34,7 +34,9 @@ public class FigureController extends ObjectController {
         graphics.setColor(isSelected ? Color.RED : (team == Figure.Team.WHITE ? Color.BLACK : Color.WHITE));
         graphics.setStroke(new BasicStroke(isSelected ? 4 : 2));
         graphics.drawOval(rect.x, rect.y, rect.width, rect.height);
+        figure.getStrategy().doAdditionalDrawing(graphics, rect);
         graphics.setStroke(new BasicStroke(1));
+
     }
 
     @Override
