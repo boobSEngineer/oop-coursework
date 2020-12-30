@@ -100,6 +100,8 @@ public class GameFieldView extends JPanel implements ControllableView {
 
     @Override
     public void paint(Graphics graphics) {
+        ((Graphics2D) graphics).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        
         graphics.setColor(Color.WHITE);
         graphics.fillRect(0, 0, width, height);
 
